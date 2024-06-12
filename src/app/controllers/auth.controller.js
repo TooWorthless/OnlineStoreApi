@@ -6,7 +6,6 @@ const authController = {};
 
 authController.register = async (req, res) => {
     const { username, password } = req.body;
-    console.log('username, password :>> ', username, password);
 
     try {
         const userExists = await User.findOne({ username });
@@ -15,7 +14,6 @@ authController.register = async (req, res) => {
         }
 
         const user = await User.create({ username, password, role: 'user'});
-        console.log('user :>> ', user);
         res.status(201).json({
             _id: user._id,
             username: user.username,
@@ -23,7 +21,6 @@ authController.register = async (req, res) => {
             token: generateToken(user._id),
         });
     } catch (err) {
-        console.log('err.stack :>> ', err.stack);
         res.status(500).json({ message: 'Server error' });
     }
 };

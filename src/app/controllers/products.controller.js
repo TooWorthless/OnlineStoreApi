@@ -1,7 +1,4 @@
 import { Product } from '../../mongo/schemes/product.scheme.js';
-//         if (req.user && req.user.role !== 'admin') {
-//             return res.status(403).json({ message: 'Access denied' });
-//         }
 
 const productsController = {};
 
@@ -85,7 +82,7 @@ productsController.deleteProduct = async (req, res, next) => {
         if (req.user && req.user.role !== 'admin') {
             return res.status(403).json({ message: 'Access denied' });
         }
-        
+
         const productId = req.params.id;
         const product = await Product.findByIdAndDelete(productId);
         if (!product) {
