@@ -25,3 +25,5 @@ async function connect(url) {
 export {
     connect
 };
+
+// admin : 70WZDS0JBN7ihfoc

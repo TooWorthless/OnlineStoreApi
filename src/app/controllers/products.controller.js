@@ -1,4 +1,4 @@
-import { Product } from '../../mongo/schemes/product.scheme.js';
+import Product from '../models/product.model.js';
 
 const productsController = {};
 
@@ -39,18 +39,11 @@ productsController.getProductsByCategoryId = async (req, res, next) => {
 
 productsController.createProduct = async (req, res, next) => {
     try {
-        if (req.user && req.user.role !== 'admin') {
-            return res.status(403).json({ message: 'Access denied' });
-        }
-
         const { title, categoryId, description, price, sizes, images } = req.body;
         const product = new Product({ title, categoryId, description, price, sizes, images });
         await product.save();
         res.status(201).json(product);
     } catch (error) {
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({ message: error.message });
-        }
         next(error);
     }
 };
@@ -58,10 +51,6 @@ productsController.createProduct = async (req, res, next) => {
 
 productsController.updateProduct = async (req, res, next) => {
     try {
-        if (req.user && req.user.role !== 'admin') {
-            return res.status(403).json({ message: 'Access denied' });
-        }
-
         const productId = req.params.id;
         const updates = req.body;
         const product = await Product.findByIdAndUpdate(productId, updates, { new: true }).select('-__v');
@@ -70,19 +59,12 @@ productsController.updateProduct = async (req, res, next) => {
         }
         res.json(product);
     } catch (error) {
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({ message: error.message });
-        }
         next(error);
     }
 };
 
 productsController.deleteProduct = async (req, res, next) => {
     try {
-        if (req.user && req.user.role !== 'admin') {
-            return res.status(403).json({ message: 'Access denied' });
-        }
-
         const productId = req.params.id;
         const product = await Product.findByIdAndDelete(productId);
         if (!product) {

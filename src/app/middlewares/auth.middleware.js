@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../../mongo/schemes/user.scheme.js';
+import User from '../models/user.model.js';
 import { configDotenv } from 'dotenv';
 const config = configDotenv().parsed;
 
 
-const authMiddleware = async (req, res, next) => {
+const jwtAuthMiddleware = async (req, res, next) => {
     const token = req.headers['Authorization'] || req.headers['authorization'];
     
     if (!token) {
@@ -24,4 +24,16 @@ const authMiddleware = async (req, res, next) => {
     }
 };
 
-export default authMiddleware;
+const rbacAuthMiddleware = (role) => {
+    return (req, res, next) => {
+        if (req.user && req.user.role === role) {
+            return next();
+        }
+        return res.status(403).json({ message: 'Access denied. Insufficient role.' });
+    };
+};
+
+export {
+    jwtAuthMiddleware,
+    rbacAuthMiddleware
+};
