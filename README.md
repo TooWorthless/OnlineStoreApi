@@ -25,4 +25,4 @@
 
 <br>
 <br>
-Used technologies: Node.js, Express.js, Mongoose, bcrypt, jsonwebtoken
+Used technologies: Node.js, Express.js, Mongoose, bcrypt, jsonwebtoken, Joi
